@@ -13,6 +13,12 @@
         android:theme="@style/Theme.DriversLicense"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_A2"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_A1"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
