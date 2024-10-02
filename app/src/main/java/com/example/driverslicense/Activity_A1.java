@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Activity_A1 extends AppCompatActivity {
-    Button btnBack;
+    Button btnBack, btnRandom, btnExam, btnList, btnContent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
