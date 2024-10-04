@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Activity_A1 extends AppCompatActivity {
-    Button btnBack, btnRandom, btnExam, btnList, btnContent;
+    Button btnBack, btnRandom, btnExam, btnList, btnContent, btnHistory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +24,11 @@ public class Activity_A1 extends AppCompatActivity {
             return insets;
         });
         btnBack = findViewById(R.id.btn_back);
+        btnRandom = findViewById(R.id.btn_random);
+        btnExam = findViewById(R.id.btn_exam);
+        btnList = findViewById(R.id.btn_list);
+        btnContent = findViewById(R.id.btn_content);
+        btnHistory = findViewById(R.id.btn_history);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
