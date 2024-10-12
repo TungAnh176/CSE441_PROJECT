@@ -1,4 +1,4 @@
-package com.example.driverslicense;
+package com.example.driverslicense.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Activity_A1 extends AppCompatActivity {
+import com.example.driverslicense.R;
+
+public class ActivityA1 extends AppCompatActivity {
     Button btnBack, btnRandom, btnExam, btnList, btnContent, btnHistory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,30 @@ public class Activity_A1 extends AppCompatActivity {
         btnList = findViewById(R.id.btn_list);
         btnContent = findViewById(R.id.btn_content);
         btnHistory = findViewById(R.id.btn_history);
+        //Quay lại giao diện chính
+        setupBackButton();
+        //Chuyển đến giao diện exam
+        setupExamButton();
+
+    }
+
+    private void setupBackButton() {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Activity_A1.this, MainActivity.class);
+                Intent intent = new Intent(ActivityA1.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupExamButton(){
+        btnExam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivityA1.this, ExamActivity.class);
+                intent.putExtra("exam_name", "Bộ đề A1");
+                intent.putExtra("exam_id", 1);
                 startActivity(intent);
             }
         });
