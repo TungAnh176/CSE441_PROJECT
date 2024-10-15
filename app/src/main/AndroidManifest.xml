@@ -20,7 +20,14 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity_Shuffle_A1"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Shuffle_A2"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
