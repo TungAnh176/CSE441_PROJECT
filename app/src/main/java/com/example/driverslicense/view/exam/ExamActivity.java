@@ -1,4 +1,4 @@
-package com.example.driverslicense.view;
+package com.example.driverslicense.view.exam;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.example.driverslicense.R;
 import com.example.driverslicense.api.ApiServices;
-import com.example.driverslicense.dapater.ExamAdapter;
+import com.example.driverslicense.adapter.ExamAdapter;
 import com.example.driverslicense.model.Exam;
+import com.example.driverslicense.view.main.ActivityA1;
+import com.example.driverslicense.view.main.ActivityA2;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,7 @@ public class ExamActivity extends AppCompatActivity {
     ListView listView;
     List<Exam> examList;
     ExamAdapter examAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +71,15 @@ public class ExamActivity extends AppCompatActivity {
     }
 
     private void fetch(int type){
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Exam.class, new ExamDeserializer())
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://127.0.0.1:8000/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://10.0.2.2:8000/api/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+
         ApiServices apiServices = retrofit.create(ApiServices.class);
 
         listView = findViewById(R.id.item_exam);
@@ -81,9 +91,9 @@ public class ExamActivity extends AppCompatActivity {
             public void onResponse(Call<List<Exam>> call, Response<List<Exam>> response) {
                 Toast.makeText(ExamActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
-                    examList.clear();  // Xóa danh sách cũ trước khi thêm mới
-                    examList.addAll(response.body());  // Thêm dữ liệu vào danh sách
-                    examAdapter.notifyDataSetChanged();  // Cập nhật ListView
+                    examList.clear();
+                    examList.addAll(response.body());
+                    listView.setAdapter(examAdapter);
                 } else {
                     // Xử lý trường hợp không thành công
 

@@ -1,4 +1,4 @@
-package com.example.driverslicense.view;
+package com.example.driverslicense.view.main;
 
 import android.content.Intent;
 import android.os.Bundle;
