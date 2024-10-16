@@ -1,4 +1,4 @@
-package com.example.driverslicense.dapater;
+package com.example.driverslicense.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,8 +27,8 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_exam, parent, false);
 
         }
-        TextView txtExam = convertView.findViewById(R.id.txt_item);
-        txtExam.setText(exam.getId());
+        TextView txtID = convertView.findViewById(R.id.txt_id);
+        txtID.setText("Bộ đề số " + String.valueOf(exam.getSet_fixed_number()));
         return convertView;
     }
 

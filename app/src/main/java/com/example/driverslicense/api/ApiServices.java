@@ -9,7 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ApiServices {
-    @GET("api/exams")
+    @GET("exams")
     Call<List<Exam>> getExamsData(
             @Query("exam_type") int examType
 
