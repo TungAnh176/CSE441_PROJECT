@@ -1,6 +1,7 @@
 package com.example.driverslicense.api;
 
 import com.example.driverslicense.model.Exam;
+import com.example.driverslicense.model.History;
 
 import java.util.List;
 
@@ -13,5 +14,10 @@ public interface ApiServices {
     Call<List<Exam>> getExamsData(
             @Query("exam_type") int examType
 
+    );
+
+    @GET("get-user-exam-history")
+    Call<List<History>> getUserExamHistory(
+            @Query("type_id") int typeId
     );
 }
