@@ -95,7 +95,7 @@ public class ExamActivity extends AppCompatActivity {
                     examList.addAll(response.body());
                     listView.setAdapter(examAdapter);
                 } else {
-                    // Xử lý trường hợp không thành công
+
 
                 }
             }

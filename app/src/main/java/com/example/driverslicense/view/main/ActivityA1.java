@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.view.exam.ExamActivity;
+import com.example.driverslicense.view.history.HistoryActivity;
 
 public class ActivityA1 extends AppCompatActivity {
     Button btnBack, btnRandom, btnExam, btnList, btnContent, btnHistory;
@@ -36,7 +37,19 @@ public class ActivityA1 extends AppCompatActivity {
         setupBackButton();
         //Chuyển đến giao diện exam
         setupExamButton();
+        //Chuyển đến giao diện lịch sử
+        setupHistoryButton();
+    }
 
+    private void setupHistoryButton() {
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivityA1.this, HistoryActivity.class);
+                intent.putExtra("id", 1);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupBackButton() {
