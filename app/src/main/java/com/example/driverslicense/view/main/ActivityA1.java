@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.driverslicense.R;
 import com.example.driverslicense.view.exam.ExamActivity;
 import com.example.driverslicense.view.history.HistoryActivity;
+import com.example.driverslicense.view.question.QuestionActivity;
 
 public class ActivityA1 extends AppCompatActivity {
     Button btnBack, btnRandom, btnExam, btnList, btnContent, btnHistory;
@@ -39,6 +40,8 @@ public class ActivityA1 extends AppCompatActivity {
         setupExamButton();
         //Chuyển đến giao diện lịch sử
         setupHistoryButton();
+
+        setBtnBack();
     }
 
     private void setupHistoryButton() {
@@ -69,6 +72,18 @@ public class ActivityA1 extends AppCompatActivity {
                 Intent intent = new Intent(ActivityA1.this, ExamActivity.class);
                 intent.putExtra("exam_name", "Bộ đề A1");
                 intent.putExtra("exam_id", 1);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setBtnBack(){
+        btnList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityA1.this, QuestionActivity.class);
+                intent.putExtra("name", "200 câu");
+                intent.putExtra("type_id", 1);
                 startActivity(intent);
             }
         });
