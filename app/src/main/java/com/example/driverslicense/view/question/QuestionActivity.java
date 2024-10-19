@@ -57,7 +57,7 @@ public class QuestionActivity extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btn_back_question);
         txtQuestion = findViewById(R.id.txt_question);
-        listView = findViewById(R.id.item_question_id);
+        listView = findViewById(R.id.item_list_content_id);
 
         String txt = getIntent().getStringExtra("name");
         int type = getIntent().getIntExtra("type_id", 0);

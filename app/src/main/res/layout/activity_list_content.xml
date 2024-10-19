@@ -52,7 +52,7 @@
         </TableLayout>
 
         <ListView
-            android:id="@+id/item_question_id"
+            android:id="@+id/item_list_content_id"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

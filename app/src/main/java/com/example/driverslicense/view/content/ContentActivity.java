@@ -78,8 +78,8 @@ public class ContentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ContentActivity.this, ListContentActivity.class);
                 intent.putExtra("name", "Khái niệm và quy tắc giao thông");
-                intent.putExtra("type_id", type);
-                intent.putExtra("category_id", 1);
+                intent.putExtra("type_id", type); // Đảm bảo 'type' không bị null
+                intent.putExtra("category_id", 1); // Đảm bảo giá trị truyền là hợp lệ
                 startActivity(intent);
             }
         });
