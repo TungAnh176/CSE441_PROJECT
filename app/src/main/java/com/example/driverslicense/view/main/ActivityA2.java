@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
+import com.example.driverslicense.view.content.ContentActivity;
 import com.example.driverslicense.view.exam.ExamActivity;
 import com.example.driverslicense.view.history.HistoryActivity;
 import com.example.driverslicense.view.question.QuestionActivity;
@@ -42,6 +43,8 @@ public class ActivityA2 extends AppCompatActivity {
         setupHistoryButton();
 
         setBtnBack();
+
+        setupContentButton();
 
     }
 
@@ -84,6 +87,18 @@ public class ActivityA2 extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityA2.this, QuestionActivity.class);
                 intent.putExtra("name", "450 câu");
+                intent.putExtra("type_id", 2);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupContentButton(){
+        btnContentA2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivityA2.this, ContentActivity.class);
+                intent.putExtra("name", "Chủ đề");
                 intent.putExtra("type_id", 2);
                 startActivity(intent);
             }
