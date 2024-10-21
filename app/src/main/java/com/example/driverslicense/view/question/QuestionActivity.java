@@ -15,14 +15,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
-import com.example.driverslicense.adapter.ExamAdapter;
 import com.example.driverslicense.adapter.ListQuestionAdapter;
-import com.example.driverslicense.api.ApiServices;
-import com.example.driverslicense.api.ListQuestionService;
-import com.example.driverslicense.model.Exam;
+import com.example.driverslicense.controller.ListQuestionService;
 import com.example.driverslicense.model.Question;
-import com.example.driverslicense.view.exam.ExamActivity;
-import com.example.driverslicense.view.exam.ExamDeserializer;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;

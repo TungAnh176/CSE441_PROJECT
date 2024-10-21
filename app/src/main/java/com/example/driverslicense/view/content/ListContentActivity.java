@@ -16,8 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.adapter.ListContentAdapter;
-import com.example.driverslicense.adapter.ListQuestionAdapter;
-import com.example.driverslicense.api.ContentService;
+import com.example.driverslicense.controller.ContentService;
 import com.example.driverslicense.model.Question;
 import com.example.driverslicense.view.question.QuestionDeserializer;
 import com.google.gson.Gson;

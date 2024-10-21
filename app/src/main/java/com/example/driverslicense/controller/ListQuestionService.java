@@ -1,6 +1,5 @@
-package com.example.driverslicense.api;
+package com.example.driverslicense.controller;
 
-import com.example.driverslicense.model.Exam;
 import com.example.driverslicense.model.Question;
 
 import java.util.List;
