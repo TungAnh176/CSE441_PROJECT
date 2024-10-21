@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.driverslicense.R;
-import com.example.driverslicense.model.Exam;
+
 import com.example.driverslicense.model.History;
 
 import java.util.List;
