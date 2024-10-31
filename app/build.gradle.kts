@@ -47,5 +47,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation ("com.google.android.gms:play-services-base:18.0.1")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
 }
