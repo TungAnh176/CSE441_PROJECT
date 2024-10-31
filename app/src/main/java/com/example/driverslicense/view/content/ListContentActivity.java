@@ -16,9 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.adapter.ListContentAdapter;
-import com.example.driverslicense.controller.ContentService;
-import com.example.driverslicense.model.Question;
-import com.example.driverslicense.view.question.QuestionDeserializer;
+import com.example.driverslicense.model.question.Question;
+import com.example.driverslicense.controller.QuestionController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -68,7 +67,7 @@ public class ListContentActivity extends AppCompatActivity {
     private void fecthCategory(int type, int category) {
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Question.class, new QuestionDeserializer())
+                .registerTypeAdapter(Question.class, new QuestionController())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

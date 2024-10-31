@@ -42,7 +42,7 @@ public class ActivityA1 extends AppCompatActivity {
         //Chuyển đến giao diện lịch sử
         setupHistoryButton();
 
-        setBtnBack();
+        setBtnList();
 
         setupContentButton();
     }
@@ -59,12 +59,8 @@ public class ActivityA1 extends AppCompatActivity {
     }
 
     private void setupBackButton() {
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ActivityA1.this, MainActivity.class);
-                startActivity(intent);
-            }
+        btnBack.setOnClickListener(view -> {
+            finish();
         });
     }
 
@@ -80,7 +76,7 @@ public class ActivityA1 extends AppCompatActivity {
         });
     }
 
-    private void setBtnBack(){
+    private void setBtnList(){
         btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

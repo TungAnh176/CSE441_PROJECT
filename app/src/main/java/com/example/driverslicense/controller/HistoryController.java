@@ -1,8 +1,8 @@
-package com.example.driverslicense.view.history;
+package com.example.driverslicense.controller;
 
-import com.example.driverslicense.model.History;
-import com.example.driverslicense.model.QuestionHistory;
-import com.example.driverslicense.model.AnswerHistory;
+import com.example.driverslicense.model.history.AnswerHistory;
+import com.example.driverslicense.model.history.History;
+import com.example.driverslicense.model.history.QuestionHistory;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonDeserializationContext;
@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryDeserializer implements JsonDeserializer<History> {
+public class HistoryController implements JsonDeserializer<History> {
 
     @Override
     public History deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -23,27 +23,28 @@ public class HistoryDeserializer implements JsonDeserializer<History> {
         int score = json.getAsJsonObject().get("score").getAsInt();
         boolean pass = json.getAsJsonObject().get("pass").getAsBoolean();
 
-        // Deserialize questions
+        // Deserialize questions as List<QuestionHistory>
         JsonElement questionsElement = json.getAsJsonObject().get("questions");
         List<QuestionHistory> questions = new ArrayList<>();
 
         if (questionsElement.isJsonArray()) {
             JsonArray questionsArray = questionsElement.getAsJsonArray();
             for (JsonElement questionElement : questionsArray) {
-                QuestionHistory question = context.deserialize(questionElement, QuestionHistory.class);
+                int questionId = questionElement.getAsInt();
+                QuestionHistory question = new QuestionHistory(questionId); // Assuming this constructor exists
                 questions.add(question);
             }
         }
 
-        // Deserialize answers
+        // Deserialize answers as List<AnswerHistory>
         JsonElement answersElement = json.getAsJsonObject().get("answers");
         List<AnswerHistory> answers = new ArrayList<>();
 
         if (answersElement.isJsonArray()) {
             JsonArray answersArray = answersElement.getAsJsonArray();
             for (JsonElement answerElement : answersArray) {
-                AnswerHistory answer = context.deserialize(answerElement, AnswerHistory.class);
-                answers.add(answer);
+                String answer = answerElement.getAsString();
+                answers.add(new AnswerHistory(answer));
             }
         }
 

@@ -15,8 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.adapter.HistoryAdapter;
-import com.example.driverslicense.controller.ApiServices;
-import com.example.driverslicense.model.History;
+import com.example.driverslicense.api.ApiServices;
+import com.example.driverslicense.controller.HistoryController;
+import com.example.driverslicense.model.history.History;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;
@@ -46,13 +47,10 @@ public class HistoryActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
         btnBackHistory = findViewById(R.id.btn_back_history);
         int typeID = getIntent().getIntExtra("id", 0);
-        //Quay lại giao diện chính
         setupBackButton();
-        
         fetchHisory(typeID);
     }
 
@@ -62,7 +60,7 @@ public class HistoryActivity extends AppCompatActivity {
         historyList = new ArrayList<>();
         historyAdapter = new HistoryAdapter(this, historyList);
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(History.class, new HistoryDeserializer())
+                .registerTypeAdapter(History.class, new HistoryController())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -94,14 +92,14 @@ public class HistoryActivity extends AppCompatActivity {
         });
     }
 
-
     private void setupBackButton() {
         btnBackHistory.setOnClickListener(view -> {
-            Intent intent = (getIntent().getIntExtra("id", 0) == 1)
-                    ? new Intent(HistoryActivity.this, ActivityA1.class)
-                    : new Intent(HistoryActivity.this, ActivityA2.class);
+            Intent intent = new Intent(HistoryActivity.this,
+                    getIntent().getIntExtra("id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         });
     }
+
 }

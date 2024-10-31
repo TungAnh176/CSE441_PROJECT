@@ -16,8 +16,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.adapter.ListQuestionAdapter;
-import com.example.driverslicense.controller.ListQuestionService;
-import com.example.driverslicense.model.Question;
+import com.example.driverslicense.api.ApiServices;
+import com.example.driverslicense.controller.QuestionController;
+import com.example.driverslicense.model.question.Question;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;
@@ -64,7 +65,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void fetchListQuestion(int type) {
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Question.class, new QuestionDeserializer())
+                .registerTypeAdapter(Question.class, new QuestionController())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -72,7 +73,7 @@ public class QuestionActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        ListQuestionService listQuestionService = retrofit.create(ListQuestionService.class);
+        ApiServices listQuestionService = retrofit.create(ApiServices.class);
 
         questions = new ArrayList<>();
         listQuestionAdapter = new ListQuestionAdapter (this, questions);

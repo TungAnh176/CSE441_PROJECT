@@ -14,9 +14,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.example.driverslicense.R;
-import com.example.driverslicense.controller.ApiServices;
+import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.adapter.ExamAdapter;
-import com.example.driverslicense.model.Exam;
+import com.example.driverslicense.controller.ExamController;
+import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;
@@ -58,21 +59,25 @@ public class ExamActivity extends AppCompatActivity {
 
         setupBackButton();
         fetch(type);
+        actionList();
     }
 
     private void setupBackButton() {
         btnBack.setOnClickListener(view -> {
-            Intent intent = (getIntent().getIntExtra("exam_id", 0) == 1)
-                    ? new Intent(ExamActivity.this, ActivityA1.class)
-                    : new Intent(ExamActivity.this, ActivityA2.class);
+            Intent intent = new Intent(ExamActivity.this,
+                    getIntent().getIntExtra("exam_id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
+
+            // Thêm cờ để không lưu vào bộ nhớ
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent);
-            finish();
+            finish(); // Có thể bỏ dòng này nếu không cần
         });
     }
 
     private void fetch(int type){
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Exam.class, new ExamDeserializer())
+                .registerTypeAdapter(Exam.class, new ExamController())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

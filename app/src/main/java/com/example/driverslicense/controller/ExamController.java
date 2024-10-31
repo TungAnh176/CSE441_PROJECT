@@ -1,7 +1,7 @@
-package com.example.driverslicense.view.exam;
+package com.example.driverslicense.controller;
 
-import com.example.driverslicense.model.Exam;
-import com.example.driverslicense.model.QuestionExam;
+import com.example.driverslicense.model.exam.Exam;
+import com.example.driverslicense.model.exam.QuestionExam;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonDeserializationContext;
@@ -12,7 +12,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExamDeserializer implements JsonDeserializer<Exam> {
+import android.util.Log;
+
+// ... các import khác
+
+public class ExamController implements JsonDeserializer<Exam> {
+    private static final String TAG = "ExamDeserializer"; // Thêm một hằng số TAG để sử dụng cho log
+
     @Override
     public Exam deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         int id = json.getAsJsonObject().get("id").getAsInt();
@@ -31,10 +37,16 @@ public class ExamDeserializer implements JsonDeserializer<Exam> {
                 QuestionExam question = context.deserialize(questionElement, QuestionExam.class);
                 questions.add(question);
             }
+            // Log các câu hỏi
+            for (QuestionExam question : questions) {
+                Log.d(TAG, "Question: " + question.toString()); // Bạn có thể cần override phương thức toString() trong QuestionExam
+            }
         } else if (questionsElement.isJsonPrimitive()) {
             String questionsString = questionsElement.getAsString();
+            Log.d(TAG, "Questions as string: " + questionsString);
         }
 
         return new Exam(exam_type, id, is_fixed, questions, set_fixed_number, user_id);
     }
 }
+

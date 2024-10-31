@@ -2,7 +2,6 @@ package com.example.driverslicense.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.example.driverslicense.R;
 
-import com.example.driverslicense.model.History;
+import com.example.driverslicense.model.history.History;
 
 import java.util.List;
 

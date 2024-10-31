@@ -10,25 +10,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.driverslicense.R;
-import com.example.driverslicense.model.exam.Exam;
+import com.example.driverslicense.model.exam.QuestionExam;
 
 import java.util.List;
 
-public class ExamAdapter extends ArrayAdapter<Exam> {
+public class ExamTypeAdapter  extends ArrayAdapter<QuestionExam> {
 
-    public ExamAdapter(Context context, List<Exam> exams) {
+    public ExamTypeAdapter(Context context, List< QuestionExam > exams) {
         super(context, 0, exams);
     }
 
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        Exam exam = getItem(position);
+        QuestionExam exam = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_exam, parent, false);
 
         }
         TextView txtID = convertView.findViewById(R.id.txt_id);
-        txtID.setText("Bộ đề số " + String.valueOf(exam.getSet_fixed_number()));
+        txtID.setText("Câu hỏi số " + String.valueOf(exam.getQuestion_id()));
         return convertView;
     }
 
