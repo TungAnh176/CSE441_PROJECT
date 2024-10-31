@@ -18,7 +18,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.adapter.ListContentAdapter;
-
 import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.model.question.Question;
 import com.example.driverslicense.controller.QuestionController;
@@ -94,8 +93,8 @@ public class ListContentActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            startActivity(new Intent(ListContentActivity.this, DetailQuesionActivity.class)
-//                                    .putExtra("id", questions.get(position).getId()));
+                            startActivity(new Intent(ListContentActivity.this, DetailQuesionActivity.class)
+                                    .putExtra("id", questions.get(position).getId()));
                         }
                     });
                 }
