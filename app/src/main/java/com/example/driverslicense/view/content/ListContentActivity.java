@@ -3,6 +3,8 @@ package com.example.driverslicense.view.content;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,10 +18,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
 import com.example.driverslicense.adapter.ListContentAdapter;
-import com.example.driverslicense.adapter.ListQuestionAdapter;
-import com.example.driverslicense.api.ContentService;
-import com.example.driverslicense.model.Question;
-import com.example.driverslicense.view.question.QuestionDeserializer;
+import com.example.driverslicense.api.ApiServices;
+import com.example.driverslicense.model.question.Question;
+import com.example.driverslicense.controller.QuestionController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -55,10 +56,9 @@ public class ListContentActivity extends AppCompatActivity {
         listView = findViewById(R.id.item_list_content_id);
 
         String txt = getIntent().getStringExtra("name");
-        int type = getIntent().getIntExtra("type_id",0);
+        int type = getIntent().getIntExtra("type_id", 0);
         int category = getIntent().getIntExtra("category_id", 0);
-        System.out.println(type);
-        System.out.println(category);
+
         txtListContent.setText(txt);
 
         setupBackButton();
@@ -69,7 +69,7 @@ public class ListContentActivity extends AppCompatActivity {
     private void fecthCategory(int type, int category) {
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Question.class, new QuestionDeserializer())
+                .registerTypeAdapter(Question.class, new QuestionController())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -77,10 +77,10 @@ public class ListContentActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        ContentService contentService = retrofit.create(ContentService.class);
+        ApiServices contentService = retrofit.create(ApiServices.class);
 
         questions = new ArrayList<>();
-        listContentAdapter = new ListContentAdapter(this,questions);
+        listContentAdapter = new ListContentAdapter(this, questions);
 
         contentService.getListCategory(type, category).enqueue(new Callback<List<Question>>() {
             @Override
@@ -90,12 +90,19 @@ public class ListContentActivity extends AppCompatActivity {
                     questions.clear();
                     questions.addAll(response.body());
                     listView.setAdapter(listContentAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            startActivity(new Intent(ListContentActivity.this, DetailQuesionActivity.class)
+//                                    .putExtra("id", questions.get(position).getId()));
+                        }
+                    });
                 }
             }
 
             @Override
             public void onFailure(Call<List<Question>> call, Throwable throwable) {
-                Toast.makeText(ListContentActivity.this, "Error"+ throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListContentActivity.this, "Error" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("QuestionActivity", "Error fetching exams: ", throwable);
             }
         });
@@ -103,22 +110,7 @@ public class ListContentActivity extends AppCompatActivity {
 
     private void setupBackButton() {
         btnBack.setOnClickListener(view -> {
-            // Tạo một Intent để chuyển từ ListContentActivity về ContentActivity
-            Intent intent = new Intent(ListContentActivity.this, ContentActivity.class);
 
-            // Truyền lại các giá trị cần thiết (nếu có) từ Intent ban đầu
-            String name = getIntent().getStringExtra("name");
-            int type = getIntent().getIntExtra("type_id", 0);
-            int categoryId = getIntent().getIntExtra("category_id", 0);
-
-            // Đưa dữ liệu này vào Intent để chuyển lại ContentActivity
-            intent.putExtra("name", name);
-            intent.putExtra("type_id", type);
-            intent.putExtra("category_id", categoryId);
-
-            // Bắt đầu Activity ContentActivity
-            startActivity(intent);
-            // Kết thúc ListContentActivity để không giữ lại trong ngăn xếp
             finish();
         });
     }

@@ -12,13 +12,29 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
+import com.example.driverslicense.api.ApiServices;
+import com.example.driverslicense.model.exam.Exam;
+import com.example.driverslicense.model.exam.RandomResponse;
 import com.example.driverslicense.view.content.ContentActivity;
 import com.example.driverslicense.view.exam.ExamActivity;
+import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.view.history.HistoryActivity;
 import com.example.driverslicense.view.question.QuestionActivity;
+import com.example.driverslicense.view.random.RandomExamActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityA1 extends AppCompatActivity {
     Button btnBack, btnRandom, btnExam, btnList, btnContent, btnHistory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +58,39 @@ public class ActivityA1 extends AppCompatActivity {
         //Chuyển đến giao diện lịch sử
         setupHistoryButton();
 
-        setBtnBack();
+        setBtnList();
 
         setupContentButton();
+
+        btnRandom.setOnClickListener(v -> {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Exam.class, new ExamController())
+                    .create();
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:8000/api/")
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(client)
+                    .build();
+
+            ApiServices apiServices = retrofit.create(ApiServices.class);
+            apiServices.getRandom(1).enqueue(new Callback<RandomResponse>() {
+                @Override
+                public void onResponse(Call<RandomResponse> call, Response<RandomResponse> response) {
+                    startActivity(new Intent(ActivityA1.this, RandomExamActivity.class)
+                            .putExtra("exam_id", response.body().getExam_id()));
+                }
+
+                @Override
+                public void onFailure(Call<RandomResponse> call, Throwable throwable) {
+
+                }
+            });
+
+        });
     }
 
     private void setupHistoryButton() {
@@ -59,16 +105,12 @@ public class ActivityA1 extends AppCompatActivity {
     }
 
     private void setupBackButton() {
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ActivityA1.this, MainActivity.class);
-                startActivity(intent);
-            }
+        btnBack.setOnClickListener(view -> {
+            finish();
         });
     }
 
-    private void setupExamButton(){
+    private void setupExamButton() {
         btnExam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +122,7 @@ public class ActivityA1 extends AppCompatActivity {
         });
     }
 
-    private void setBtnBack(){
+    private void setBtnList() {
         btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +134,7 @@ public class ActivityA1 extends AppCompatActivity {
         });
     }
 
-    private void setupContentButton(){
+    private void setupContentButton() {
         btnContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

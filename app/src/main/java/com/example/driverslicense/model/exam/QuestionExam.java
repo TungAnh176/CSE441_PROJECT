@@ -1,4 +1,4 @@
-package com.example.driverslicense.model;
+package com.example.driverslicense.model.exam;
 
 public class QuestionExam {
     private int question_id;
@@ -13,5 +13,12 @@ public class QuestionExam {
 
     public void setQuestion_id(int question_id) {
         this.question_id = question_id;
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionExam{" +
+                "question_id=" + question_id +
+                '}';
     }
 }

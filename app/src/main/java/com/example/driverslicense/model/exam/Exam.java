@@ -1,4 +1,4 @@
-package com.example.driverslicense.model;
+package com.example.driverslicense.model.exam;
 
 import java.util.List;
 

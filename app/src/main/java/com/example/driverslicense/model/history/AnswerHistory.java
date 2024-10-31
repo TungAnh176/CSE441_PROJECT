@@ -1,4 +1,4 @@
-package com.example.driverslicense.model;
+package com.example.driverslicense.model.history;
 
 public class AnswerHistory {
     private String answer;
@@ -15,3 +15,4 @@ public class AnswerHistory {
         this.answer = answer;
     }
 }
+

@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".view.random.RandomExamActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.content.ListContentActivity"
             android:exported="false" />
         <activity
