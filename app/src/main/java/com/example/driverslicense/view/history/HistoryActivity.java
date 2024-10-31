@@ -97,8 +97,9 @@ public class HistoryActivity extends AppCompatActivity {
             Intent intent = new Intent(HistoryActivity.this,
                     getIntent().getIntExtra("id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent);
-            finish();
+            finish(); // Có thể bỏ dòng này nếu không cần
         });
     }
 

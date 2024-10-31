@@ -14,4 +14,5 @@ public class QuestionExam {
     public void setQuestion_id(int question_id) {
         this.question_id = question_id;
     }
+
 }

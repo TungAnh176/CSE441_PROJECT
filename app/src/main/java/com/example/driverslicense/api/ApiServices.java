@@ -6,8 +6,6 @@ import com.example.driverslicense.model.history.History;
 import com.example.driverslicense.model.question.AnswerQuestionHistory;
 import com.example.driverslicense.model.question.Answers;
 import com.example.driverslicense.model.question.Question;
-import com.example.driverslicense.model.exam.SaveAnwer;
-import com.example.driverslicense.model.exam.SaveAnwerResponse;
 
 import java.util.List;
 

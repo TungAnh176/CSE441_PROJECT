@@ -3,6 +3,8 @@ package com.example.driverslicense.view.question;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.example.driverslicense.adapter.ListQuestionAdapter;
 import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.controller.QuestionController;
 import com.example.driverslicense.model.question.Question;
+
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;
@@ -86,6 +89,13 @@ public class QuestionActivity extends AppCompatActivity {
                     questions.clear();
                     questions.addAll(response.body());
                     listView.setAdapter(listQuestionAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            startActivity(new Intent(QuestionActivity.this, DetailQuesionActivity.class)
+//                                    .putExtra("id", questions.get(position).getId()));
+                        }
+                    });
                 }
             }
 
