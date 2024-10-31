@@ -64,10 +64,6 @@ public class ContentActivity extends AppCompatActivity {
     }
     private void setupBackButton(){
         btnBackContent.setOnClickListener(view -> {
-            Intent intent = (getIntent().getIntExtra("category_id", 0)==1)
-                    ? new Intent(ContentActivity.this, ActivityA1.class)
-                    : new Intent(ContentActivity.this, ActivityA2.class);
-            startActivity(intent);
             finish();
         });
     }
