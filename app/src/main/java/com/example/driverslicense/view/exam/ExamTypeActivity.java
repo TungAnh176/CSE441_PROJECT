@@ -1,18 +1,16 @@
-package com.example.driverslicense.view.random;
+package com.example.driverslicense.view.exam;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.View;
-import android.widget.AdapterView;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -20,15 +18,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.DataLocal.DataMemory;
+import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.R;
-import com.example.driverslicense.adapter.RandomAdapter;
+import com.example.driverslicense.adapter.ExamTypeAdapter;
 import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.model.exam.QuestionExam;
 import com.example.driverslicense.model.exam.SaveAnwer;
 import com.example.driverslicense.model.exam.SaveAnwerResponse;
 import com.example.driverslicense.view.content.DetailQuesionActivity;
-import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.view.main.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,12 +42,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RandomExamActivity extends AppCompatActivity {
-    List<QuestionExam> examList;
-    RandomAdapter examAdapter;
+public class ExamTypeActivity extends AppCompatActivity {
     ListView listView;
-    Button btnBack;
-
+    List<QuestionExam> examList;
+    ExamTypeAdapter examAdapter;
     Button btnSave;
     private CountDownTimer countDownTimer;
     private long timeLeftInMillis = 1200000;
@@ -59,82 +55,68 @@ public class RandomExamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_random_exam);
+        setContentView(R.layout.activity_exam_type);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        txtTime = findViewById(R.id.txt_time1);
-        btnSave = findViewById(R.id.btnSave1);
 
-        listView = findViewById(R.id.item_list_random);
-        btnBack = findViewById(R.id.btn_back_list);
+        txtTime = findViewById(R.id.txt_time);
+        btnSave = findViewById(R.id.btnSave);
         startTimer();
-
-        btnBack.setOnClickListener(v -> {
-            finish();
-        });
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Exam.class, new ExamController())
                 .create();
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8000/api/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
                 .build();
 
-        ApiServices contentService = retrofit.create(ApiServices.class);
+        ApiServices apiServices = retrofit.create(ApiServices.class);
 
+        listView = findViewById(R.id.item_exam_type);
         examList = new ArrayList<>();
-        examAdapter = new RandomAdapter(this, examList);
+        examAdapter = new ExamTypeAdapter(this, examList);
 
-        contentService.getExamByID(getIntent().getIntExtra("exam_id", 1)).enqueue(new Callback<Exam>() {
+        apiServices.getExamsTypeData(getIntent().getIntExtra("is_fixed", 1), getIntent().getIntExtra("id", 1), getIntent().getIntExtra("exam_id", 0)).enqueue(new Callback<List<Exam>>() {
             @Override
-            public void onResponse(@NonNull Call<Exam> call, @NonNull Response<Exam> response) {
-                Toast.makeText(RandomExamActivity.this, "Success", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<List<Exam>> call, Response<List<Exam>> response) {
+                Toast.makeText(ExamTypeActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     examList.clear();
-                    examList.addAll(response.body().getQuestions());
+                    examList.addAll(response.body().get(0).getQuestions());
                     listView.setAdapter(examAdapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startActivity(new Intent(RandomExamActivity.this, DetailQuesionActivity.class)
-                                    .putExtra("id", examList.get(position).getQuestion_id()));
-                        }
+                    listView.setOnItemClickListener((parent, view, position, id) -> {
+                        Log.d("ListView", "Item clicked at position: " + position);
+                        startActivity(new Intent(ExamTypeActivity.this, DetailQuesionActivity.class)
+                                .putExtra("id", examList.get(position).getQuestion_id())
+                                .putExtra("chude", true));
                     });
-                    DataMemory.DATA_SAVE_QUESTION.setUser_id(response.body().getUser_id() + "");
-                    DataMemory.DATA_SAVE_QUESTION.setExam_id(response.body().getExam_type() + "");
+                    DataMemory.DATA_SAVE_QUESTION.setUser_id(response.body().get(0).getUser_id() + "");
+                    DataMemory.DATA_SAVE_QUESTION.setExam_id(response.body().get(0).getExam_type() + "");
                 } else {
+
 
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Exam> call, @NonNull Throwable throwable) {
-
+            public void onFailure(Call<List<Exam>> call, Throwable throwable) {
+                Toast.makeText(ExamTypeActivity.this, "Error" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("ExamActivity", "Error fetching exams: ", throwable);
             }
         });
 
+
         btnSave.setOnClickListener(v -> {
-            Gson gson1 = new GsonBuilder()
-                    .registerTypeAdapter(Exam.class, new ExamController())
-                    .create();
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-            Retrofit retrofit1 = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8000/api/")
-                    .addConverterFactory(GsonConverterFactory.create(gson1))
-                    .client(client)
-                    .build();
-
-            ApiServices apiServices = retrofit1.create(ApiServices.class);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(RandomExamActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(ExamTypeActivity.this);
             builder.setMessage("Xác nhận nộp bài?");
             builder.setTitle("Thông báo !");
             builder.setCancelable(false);
@@ -146,12 +128,14 @@ public class RandomExamActivity extends AppCompatActivity {
                         String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
                         String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
 
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(RandomExamActivity.this);
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ExamTypeActivity.this);
                         builder1.setMessage("" + diem);
                         builder1.setTitle("Thông báo số điểm!");
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
-
+                            Intent intent = new Intent(ExamTypeActivity.this, ExamActivity.class);
+                            startActivity(intent);
+                            ExamTypeActivity.this.finish();
                             dialog.dismiss();
                         });
 
@@ -171,13 +155,10 @@ public class RandomExamActivity extends AppCompatActivity {
             });
 
             builder.setNegativeButton("hủy", (dialog, which) -> {
-                // If user click no then dialog box is canceled.
                 dialog.cancel();
             });
 
-            // Create the Alert dialog
             AlertDialog alertDialog = builder.create();
-            // Show the Alert Dialog box
             alertDialog.show();
         });
 
@@ -224,14 +205,14 @@ public class RandomExamActivity extends AppCompatActivity {
                         String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
                         String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
 
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(RandomExamActivity.this);
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ExamTypeActivity.this);
                         builder1.setMessage("" + diem);
                         builder1.setTitle("Thông báo số điểm!");
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
-                            Toast.makeText(RandomExamActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RandomExamActivity.this, MainActivity.class));
-                            RandomExamActivity.this.finish();
+                            Toast.makeText(ExamTypeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ExamTypeActivity.this, MainActivity.class));
+                            ExamTypeActivity.this.finish();
                             dialog.dismiss();
                         });
 
@@ -251,4 +232,5 @@ public class RandomExamActivity extends AppCompatActivity {
             }
         }.start();
     }
+
 }

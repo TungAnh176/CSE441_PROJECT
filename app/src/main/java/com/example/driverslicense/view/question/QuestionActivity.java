@@ -22,6 +22,7 @@ import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.controller.QuestionController;
 import com.example.driverslicense.model.question.Question;
 
+import com.example.driverslicense.view.content.DetailQuesionActivity;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;
@@ -92,8 +93,8 @@ public class QuestionActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            startActivity(new Intent(QuestionActivity.this, DetailQuesionActivity.class)
-//                                    .putExtra("id", questions.get(position).getId()));
+                            startActivity(new Intent(QuestionActivity.this, DetailQuesionActivity.class)
+                                    .putExtra("id", questions.get(position).getId()));
                         }
                     });
                 }
