@@ -92,8 +92,8 @@ public class QuestionActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            startActivity(new Intent(QuestionActivity.this, DetailQuesionActivity.class)
-//                                    .putExtra("id", questions.get(position).getId()));
+                            startActivity(new Intent(QuestionActivity.this, DetailQuesionActivity.class)
+                                    .putExtra("id", questions.get(position).getId()));
                         }
                     });
                 }
