@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.content.ContentActivity">
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:id="@+id/table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="#D9D9D9">
+
+            <Button
+                android:id="@+id/btn_back_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/back"
+                android:hint=""
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/txt_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:paddingEnd="45dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                tools:text="Chủ đề" />
+        </TableRow>
+
+        <Button
+            android:id="@+id/btn_concept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Khái niệm và quy tắc giao thông" />
+
+        <Button
+            android:id="@+id/btn_culture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Văn hóa và đạo đức" />
+
+        <Button
+            android:id="@+id/btn_technique"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Kỹ thuật lái xe" />
+
+        <Button
+            android:id="@+id/btn_structure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button"
+            android:text="Cấu tạo và sửa chữa" />
+
+        <Button
+            android:id="@+id/btn_signage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Biển báo và đường bộ" />
+
+        <Button
+            android:id="@+id/btn_sashape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Sa hình" />
+
+        <Button
+            android:id="@+id/btn_paralysis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Câu liệt" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,23 +14,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriversLicense"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Activity_A2"
+            android:name=".view.random.RandomExamActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity_A1"
+            android:name=".view.content.ListContentActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Activity_Shuffle_A1"
+            android:name=".view.content.ContentActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity_Shuffle_A2"
+            android:name=".view.question.QuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.history.HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.exam.ExamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.main.ActivityA2"
+            android:exported="false" />
+        <activity
+            android:name=".view.main.ActivityA1"
+            android:exported="false" />
+        <activity
+            android:name=".view.main.MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

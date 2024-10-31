@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_A2">
+    tools:context=".view.main.ActivityA2">
 
 
     <Button
@@ -126,4 +126,24 @@
         app:layout_constraintVertical_bias="0.777"
         tools:ignore="HardcodedText,SpUsage,TextSizeCheck" />
 
+    <Button
+        android:id="@+id/btn_history_a2"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:text="Lịch sử bài làm"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:drawableStart="@drawable/history"
+        android:paddingStart="40dp"
+        android:drawablePadding="-40dp"
+        android:background="@drawable/btn_item_background_history"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.935" />
 </androidx.constraintlayout.widget.ConstraintLayout>
