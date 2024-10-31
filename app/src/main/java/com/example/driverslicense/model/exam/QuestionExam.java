@@ -15,10 +15,4 @@ public class QuestionExam {
         this.question_id = question_id;
     }
 
-    @Override
-    public String toString() {
-        return "QuestionExam{" +
-                "question_id=" + question_id +
-                '}';
-    }
 }

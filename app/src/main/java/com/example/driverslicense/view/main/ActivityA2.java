@@ -123,7 +123,10 @@ public class ActivityA2 extends AppCompatActivity {
         });
     }
 
+
+
     private void setBtnListA2() {
+
         btnListA2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
