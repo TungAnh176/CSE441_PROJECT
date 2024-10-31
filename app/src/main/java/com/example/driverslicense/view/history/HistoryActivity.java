@@ -47,13 +47,10 @@ public class HistoryActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
         btnBackHistory = findViewById(R.id.btn_back_history);
         int typeID = getIntent().getIntExtra("id", 0);
-        //Quay lại giao diện chính
         setupBackButton();
-
         fetchHisory(typeID);
     }
 
@@ -95,13 +92,10 @@ public class HistoryActivity extends AppCompatActivity {
         });
     }
 
-
     private void setupBackButton() {
         btnBackHistory.setOnClickListener(view -> {
             Intent intent = new Intent(HistoryActivity.this,
                     getIntent().getIntExtra("id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
-
-            // Thêm cờ để không lưu vào bộ nhớ
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             startActivity(intent);

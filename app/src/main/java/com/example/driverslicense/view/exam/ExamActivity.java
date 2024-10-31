@@ -20,6 +20,7 @@ import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.R;
 import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.adapter.ExamAdapter;
+import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
@@ -62,6 +63,7 @@ public class ExamActivity extends AppCompatActivity {
 
         setupBackButton();
         fetch(type);
+        actionList();
     }
 
     private void setupBackButton() {
