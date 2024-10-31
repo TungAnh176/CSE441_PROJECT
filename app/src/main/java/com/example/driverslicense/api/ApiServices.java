@@ -2,8 +2,6 @@ package com.example.driverslicense.api;
 
 import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.model.exam.RandomResponse;
-import com.example.driverslicense.model.exam.SaveAnwer;
-import com.example.driverslicense.model.exam.SaveAnwerResponse;
 import com.example.driverslicense.model.history.History;
 import com.example.driverslicense.model.question.AnswerQuestionHistory;
 import com.example.driverslicense.model.question.Answers;
