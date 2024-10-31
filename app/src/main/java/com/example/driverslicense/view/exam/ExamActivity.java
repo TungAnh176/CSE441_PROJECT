@@ -3,6 +3,8 @@ package com.example.driverslicense.view.exam;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,10 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.R;
-import com.example.driverslicense.controller.ApiServices;
+import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.adapter.ExamAdapter;
-import com.example.driverslicense.model.Exam;
+import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
 import com.google.gson.Gson;
@@ -62,17 +66,21 @@ public class ExamActivity extends AppCompatActivity {
 
     private void setupBackButton() {
         btnBack.setOnClickListener(view -> {
-            Intent intent = (getIntent().getIntExtra("exam_id", 0) == 1)
-                    ? new Intent(ExamActivity.this, ActivityA1.class)
-                    : new Intent(ExamActivity.this, ActivityA2.class);
+            Intent intent = new Intent(ExamActivity.this,
+                    getIntent().getIntExtra("exam_id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
+
+            // Thêm cờ để không lưu vào bộ nhớ
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent);
-            finish();
+            finish(); // Có thể bỏ dòng này nếu không cần
         });
     }
 
-    private void fetch(int type){
+
+    private void fetch(int type) {
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Exam.class, new ExamDeserializer())
+                .registerTypeAdapter(Exam.class, new ExamController())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -94,6 +102,13 @@ public class ExamActivity extends AppCompatActivity {
                     examList.clear();
                     examList.addAll(response.body());
                     listView.setAdapter(examAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            startActivity(new Intent(ExamActivity.this, ExamTypeActivity.class)
+//                                    .putExtra("id", position + 1).putExtra("exam_id", type));
+                        }
+                    });
                 } else {
 
 
@@ -102,7 +117,7 @@ public class ExamActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Exam>> call, Throwable throwable) {
-                Toast.makeText(ExamActivity.this, "Error"+ throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExamActivity.this, "Error" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("ExamActivity", "Error fetching exams: ", throwable);
             }
         });

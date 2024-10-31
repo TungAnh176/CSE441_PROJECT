@@ -12,13 +12,29 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.driverslicense.R;
+import com.example.driverslicense.api.ApiServices;
+import com.example.driverslicense.model.exam.Exam;
+import com.example.driverslicense.model.exam.RandomResponse;
 import com.example.driverslicense.view.content.ContentActivity;
 import com.example.driverslicense.view.exam.ExamActivity;
+import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.view.history.HistoryActivity;
 import com.example.driverslicense.view.question.QuestionActivity;
+import com.example.driverslicense.view.random.RandomExamActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityA2 extends AppCompatActivity {
     Button btnBackA2, btnRandomA2, btnExamA2, btnListA2, btnContentA2, btnHistoryA2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +58,39 @@ public class ActivityA2 extends AppCompatActivity {
 
         setupHistoryButton();
 
-        setBtnBack();
+        setBtnListA2();
 
         setupContentButton();
+
+        btnRandomA2.setOnClickListener(v -> {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Exam.class, new ExamController())
+                    .create();
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:8000/api/")
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(client)
+                    .build();
+
+            ApiServices apiServices = retrofit.create(ApiServices.class);
+            apiServices.getRandom(2).enqueue(new Callback<RandomResponse>() {
+                @Override
+                public void onResponse(Call<RandomResponse> call, Response<RandomResponse> response) {
+                    startActivity(new Intent(ActivityA2.this, RandomExamActivity.class)
+                            .putExtra("exam_id", response.body().getExam_id()));
+                }
+
+                @Override
+                public void onFailure(Call<RandomResponse> call, Throwable throwable) {
+
+                }
+            });
+
+        });
 
     }
 
@@ -60,16 +106,12 @@ public class ActivityA2 extends AppCompatActivity {
     }
 
     private void setupBackButton() {
-        btnBackA2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ActivityA2.this, MainActivity.class);
-                startActivity(intent);
-            }
+        btnBackA2.setOnClickListener(view -> {
+            finish();
         });
     }
 
-    private void setupExamButton(){
+    private void setupExamButton() {
         btnExamA2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +123,7 @@ public class ActivityA2 extends AppCompatActivity {
         });
     }
 
-    private void setBtnBack(){
+    private void setBtnListA2() {
         btnListA2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +135,7 @@ public class ActivityA2 extends AppCompatActivity {
         });
     }
 
-    private void setupContentButton(){
+    private void setupContentButton() {
         btnContentA2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
