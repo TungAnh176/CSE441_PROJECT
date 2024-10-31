@@ -144,7 +144,7 @@ public class ActivityA2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityA2.this, ContentActivity.class);
                 intent.putExtra("name", "Chủ đề");
-                intent.putExtra("type_id", 2);
+                intent.putExtra("category_id", 2);
                 startActivity(intent);
             }
         });
