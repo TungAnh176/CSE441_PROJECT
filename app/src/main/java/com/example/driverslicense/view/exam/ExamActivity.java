@@ -20,7 +20,6 @@ import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.R;
 import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.adapter.ExamAdapter;
-import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.ActivityA2;
@@ -63,7 +62,6 @@ public class ExamActivity extends AppCompatActivity {
 
         setupBackButton();
         fetch(type);
-        actionList();
     }
 
     private void setupBackButton() {
@@ -107,8 +105,8 @@ public class ExamActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            startActivity(new Intent(ExamActivity.this, ExamTypeActivity.class)
-//                                    .putExtra("id", position + 1).putExtra("exam_id", type));
+                            startActivity(new Intent(ExamActivity.this, ExamTypeActivity.class)
+                                    .putExtra("id", position + 1).putExtra("exam_id", type));
                         }
                     });
                 } else {
