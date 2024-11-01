@@ -110,10 +110,6 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void setupBackButton(){
         btnBack.setOnClickListener(view -> {
-            Intent intent = (getIntent().getIntExtra("type_id", 0) == 1)
-                    ? new Intent(QuestionActivity.this, ActivityA1.class)
-                    : new Intent(QuestionActivity.this, ActivityA2.class);
-            startActivity(intent);
             finish();
         });
     }

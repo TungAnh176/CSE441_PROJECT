@@ -25,8 +25,8 @@ import com.example.driverslicense.adapter.RandomAdapter;
 import com.example.driverslicense.api.ApiServices;
 import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.model.exam.QuestionExam;
-import com.example.driverslicense.model.exam.SaveAnwer;
-import com.example.driverslicense.model.exam.SaveAnwerResponse;
+import com.example.driverslicense.model.exam.SaveAnswer;
+import com.example.driverslicense.model.exam.SaveAnswerResponse;
 import com.example.driverslicense.view.content.DetailQuesionActivity;
 import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.view.main.MainActivity;
@@ -139,10 +139,10 @@ public class RandomExamActivity extends AppCompatActivity {
             builder.setTitle("Thông báo !");
             builder.setCancelable(false);
             builder.setPositiveButton("Đồng ý", (dialog, which) -> {
-                apiServices.saveAnwer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnwerResponse>() {
+                apiServices.saveAnswer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnswerResponse>() {
                     @Override
-                    public void onResponse(Call<SaveAnwerResponse> call, Response<SaveAnwerResponse> response) {
-                        DataMemory.DATA_SAVE_QUESTION = new SaveAnwer();
+                    public void onResponse(Call<SaveAnswerResponse> call, Response<SaveAnswerResponse> response) {
+                        DataMemory.DATA_SAVE_QUESTION = new SaveAnswer();
                         String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
                         String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
 
@@ -163,7 +163,7 @@ public class RandomExamActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<SaveAnwerResponse> call, Throwable throwable) {
+                    public void onFailure(Call<SaveAnswerResponse> call, Throwable throwable) {
 
                     }
                 });
@@ -217,10 +217,10 @@ public class RandomExamActivity extends AppCompatActivity {
                         .build();
 
                 ApiServices apiServices = retrofit.create(ApiServices.class);
-                apiServices.saveAnwer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnwerResponse>() {
+                apiServices.saveAnswer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnswerResponse>() {
                     @Override
-                    public void onResponse(Call<SaveAnwerResponse> call, Response<SaveAnwerResponse> response) {
-                        DataMemory.DATA_SAVE_QUESTION = new SaveAnwer();
+                    public void onResponse(Call<SaveAnswerResponse> call, Response<SaveAnswerResponse> response) {
+                        DataMemory.DATA_SAVE_QUESTION = new SaveAnswer();
                         String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
                         String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
 
@@ -243,7 +243,7 @@ public class RandomExamActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<SaveAnwerResponse> call, Throwable throwable) {
+                    public void onFailure(Call<SaveAnswerResponse> call, Throwable throwable) {
 
                     }
                 });

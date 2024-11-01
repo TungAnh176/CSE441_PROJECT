@@ -3,12 +3,10 @@ package com.example.driverslicense.view.content;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -57,7 +55,7 @@ public class DetailQuesionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_quesion);
 
         textView = findViewById(R.id.txtNameQuesion);
-        imgHinh = findViewById(R.id.imgHinh);
+        imgHinh = findViewById(R.id.imgQuestion);
         optionsContainer = findViewById(R.id.llOption);
         txtDescription = findViewById(R.id.txtDescription);
         questionId = getIntent().getIntExtra("id", 1);
@@ -171,16 +169,12 @@ public class DetailQuesionActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         AnswerQuestionHistory checkAnswerResponse = response.body();
-
-                        // Kiểm tra giá trị của answers
                         Map<String, Boolean> answers = checkAnswerResponse.getAnswers();
                         if (answers != null && answers.containsKey(String.valueOf(questionId))) {
                             boolean isCorrect = answers.get(String.valueOf(questionId));
 
-                            // Hiển thị thông báo dựa trên giá trị isCorrect
                             if (isCorrect) {
                                 txtDescription.setVisibility(View.GONE);
-
                                 button.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.green));
                             } else {
                                 Log.d("TAG", "Bạn chọn sai.");
@@ -216,12 +210,5 @@ public class DetailQuesionActivity extends AppCompatActivity {
         });
 
     }
-
-    private void CreateTextView(String text) {
-        if (text != null) {
-            txtDescription.setText(text);
-        }
-    }
-
 
 }

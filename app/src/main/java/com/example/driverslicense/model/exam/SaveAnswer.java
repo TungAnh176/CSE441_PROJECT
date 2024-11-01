@@ -3,7 +3,7 @@ package com.example.driverslicense.model.exam;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SaveAnwer {
+public class SaveAnswer {
     private String user_id ="";
     private String exam_id = "";
     private List<QuestionSave> answers = new ArrayList<>();

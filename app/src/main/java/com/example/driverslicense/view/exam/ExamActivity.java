@@ -69,11 +69,9 @@ public class ExamActivity extends AppCompatActivity {
             Intent intent = new Intent(ExamActivity.this,
                     getIntent().getIntExtra("exam_id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
 
-            // Thêm cờ để không lưu vào bộ nhớ
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
             startActivity(intent);
-            finish(); // Có thể bỏ dòng này nếu không cần
+            finish();
         });
     }
 

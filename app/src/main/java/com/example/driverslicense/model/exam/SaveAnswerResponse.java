@@ -3,7 +3,7 @@ package com.example.driverslicense.model.exam;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SaveAnwerResponse {
+public class SaveAnswerResponse {
     @SerializedName("message")
     @Expose
     private String message;
