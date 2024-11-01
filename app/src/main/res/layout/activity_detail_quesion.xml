@@ -33,7 +33,7 @@
 
     <ImageView
         android:layout_alignParentStart="true"
-        android:id="@+id/imgHinh"
+        android:id="@+id/imgQuestion"
         android:layout_below="@id/txtNameQuesion"
         android:layout_width="match_parent"
         android:layout_height="150dp"/>
@@ -42,7 +42,7 @@
         android:id="@+id/llOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imgHinh"
+        android:layout_below="@id/imgQuestion"
         android:orientation="vertical">
 
 
