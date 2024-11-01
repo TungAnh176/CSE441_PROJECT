@@ -86,7 +86,6 @@ public class ListContentActivity extends AppCompatActivity {
         contentService.getListCategory(type, category).enqueue(new Callback<List<Question>>() {
             @Override
             public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
-                Toast.makeText(ListContentActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     questions.clear();
                     questions.addAll(response.body());
@@ -94,8 +93,8 @@ public class ListContentActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            startActivity(new Intent(ListContentActivity.this, DetailQuesionActivity.class)
-//                                    .putExtra("id", questions.get(position).getId()));
+                            startActivity(new Intent(ListContentActivity.this, DetailQuesionActivity.class)
+                                    .putExtra("id", questions.get(position).getId()));
                         }
                     });
                 }
@@ -103,7 +102,6 @@ public class ListContentActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Question>> call, Throwable throwable) {
-                Toast.makeText(ListContentActivity.this, "Error" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("QuestionActivity", "Error fetching exams: ", throwable);
             }
         });

@@ -28,7 +28,7 @@ public class ExamTypeAdapter  extends ArrayAdapter<QuestionExam> {
 
         }
         TextView txtID = convertView.findViewById(R.id.txt_id);
-        txtID.setText("Câu hỏi số " + String.valueOf(exam.getQuestion_id()));
+        txtID.setText("Câu hỏi số " + String.valueOf(position+1));
         return convertView;
     }
 

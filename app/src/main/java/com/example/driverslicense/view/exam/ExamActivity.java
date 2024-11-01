@@ -66,11 +66,6 @@ public class ExamActivity extends AppCompatActivity {
 
     private void setupBackButton() {
         btnBack.setOnClickListener(view -> {
-            Intent intent = new Intent(ExamActivity.this,
-                    getIntent().getIntExtra("exam_id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
-
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
             finish();
         });
     }
@@ -95,7 +90,6 @@ public class ExamActivity extends AppCompatActivity {
         apiServices.getExamsData(type).enqueue(new Callback<List<Exam>>() {
             @Override
             public void onResponse(Call<List<Exam>> call, Response<List<Exam>> response) {
-                Toast.makeText(ExamActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     examList.clear();
                     examList.addAll(response.body());
@@ -115,7 +109,6 @@ public class ExamActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Exam>> call, Throwable throwable) {
-                Toast.makeText(ExamActivity.this, "Error" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("ExamActivity", "Error fetching exams: ", throwable);
             }
         });

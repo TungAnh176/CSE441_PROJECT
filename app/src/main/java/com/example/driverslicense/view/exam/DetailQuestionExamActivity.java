@@ -35,8 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailQuestionExamActivity extends AppCompatActivity {
 
-    private static final String PREFS_NAME = "QuestionPrefs";
-    private static final String SELECTED_ANSWER_KEY = "selected_answer";
+    // Khởi tạo các hằng số và biến cho hoạt động
 
 
     TextView textView, txtDescription;
@@ -72,17 +71,19 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private void fetchQuestion(int questionId) {
+        // Tạo Retrofit và GSON để cấu hình các request và response API
         Gson gson = buildGson();
         Retrofit retrofit = buildRetrofit(gson);
 
         apiInterface = retrofit.create(ApiServices.class);
+        // Gọi API để lấy chi tiết câu hỏi
         apiInterface.getDetailQuestion(questionId).enqueue(new Callback<Question>() {
             @Override
             public void onResponse(Call<Question> call, Response<Question> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    question = response.body();
-                    displayQuestionContent();
-                    displayOptions();
+                    question = response.body();  // Lưu đối tượng câu hỏi lấy được
+                    displayQuestionContent();  // Hiển thị nội dung câu hỏi
+                    displayOptions();  // Hiển thị các lựa chọn trả lời
                 } else {
                     Log.e("DetailQuesionActivity", "Response unsuccessful: " + response.message());
                 }
@@ -96,44 +97,48 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private Gson buildGson() {
+        // Cấu hình Gson để deserializing dữ liệu với lớp QuestionController
         return new GsonBuilder()
                 .registerTypeAdapter(Question.class, new QuestionController())
                 .create();
     }
 
     private Retrofit buildRetrofit(Gson gson) {
+        // Cấu hình Retrofit với logging cho request/response và converter GSON
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         return new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/api/")
+                .baseUrl("http://10.0.2.2:8000/api/")  // Địa chỉ API
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .build();
     }
 
     private void displayQuestionContent() {
+        // Hiển thị nội dung câu hỏi và lấy câu trả lời đã lưu
         textView.setText(question.getContent());
-        selectedAnswer = getSavedAnswerForQuestion(questionId);
+        selectedAnswer = getSavedAnswerForQuestion(questionId);  // Lấy câu trả lời đã lưu từ dữ liệu
     }
 
     private void displayOptions() {
+        // Xóa tất cả các lựa chọn cũ và hiển thị lại các lựa chọn mới
         optionsContainer.removeAllViews();
         List<Option> options = question.getOptions();
 
         for (Option option : options) {
             if (option.getImage() != null) {
-                loadOptionImage(option.getImage());
+                loadOptionImage(option.getImage());  // Tải ảnh của lựa chọn nếu có
             } else {
-                imgHinh.setVisibility(View.GONE);
+                imgHinh.setVisibility(View.GONE);  // Ẩn ImageView nếu không có ảnh
             }
-
-            createOptionButtons(option);
+            createOptionButtons(option);  // Tạo nút cho từng lựa chọn
         }
     }
 
     private void loadOptionImage(String imageUrl) {
+        // Sử dụng thư viện Glide để tải ảnh từ URL và hiển thị
         imgHinh.setVisibility(View.VISIBLE);
         Glide.with(getApplicationContext())
                 .load(imageUrl)
@@ -141,6 +146,7 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private void createOptionButtons(Option option) {
+        // Tạo các nút cho từng lựa chọn nếu có các đáp án a, b, c, d
         if (option.getA() != null) createOptionButton("a: " + option.getA(), "a");
         if (option.getB() != null) createOptionButton("b: " + option.getB(), "b");
         if (option.getC() != null) createOptionButton("c: " + option.getC(), "c");
@@ -148,6 +154,7 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private String getSavedAnswerForQuestion(int questionId) {
+        // Lấy câu trả lời đã lưu cho câu hỏi dựa trên ID từ DataMemory
         for (QuestionSave answer : DataMemory.DATA_SAVE_QUESTION.getAnswers()) {
             if (answer.getQuestion_id() == questionId) {
                 return answer.getUser_answer();
@@ -157,22 +164,25 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private void createOptionButton(String optionText, String optionLabel) {
+        // Tạo nút cho một lựa chọn, với tùy chỉnh màu sắc và sự kiện khi bấm vào
         Button button = new Button(DetailQuestionExamActivity.this);
         button.setText(optionText);
 
-        styleOptionButton(button, optionLabel);
-        button.setOnClickListener(v -> onOptionSelected(button, optionLabel));
+        styleOptionButton(button, optionLabel);  // Gọi hàm để thiết lập giao diện nút
+        button.setOnClickListener(v -> onOptionSelected(button, optionLabel));  // Xử lý sự kiện khi chọn nút
 
-        optionsContainer.addView(button);
+        optionsContainer.addView(button);  // Thêm nút vào container
     }
 
     private void styleOptionButton(Button button, String optionLabel) {
+        // Đặt màu nền của nút tùy thuộc vào việc nó có được chọn hay không
         if (optionLabel.equals(selectedAnswer)) {
-            button.setBackgroundColor(ContextCompat.getColor(this, R.color.green));
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.green));  // Nếu đã chọn, đặt màu xanh lá
         } else {
-            button.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));  // Nếu chưa chọn, đặt màu xám
         }
 
+        // Thiết lập kích thước và khoảng cách của nút
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -182,6 +192,7 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private void onOptionSelected(Button button, String optionLabel) {
+        // Khi chọn một lựa chọn, đặt lại màu cho các nút khác và lưu câu trả lời
         resetOptionButtonColors();
         button.setBackgroundColor(ContextCompat.getColor(this, R.color.green));
 
@@ -190,6 +201,7 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private void resetOptionButtonColors() {
+        // Đặt lại màu của tất cả các nút về màu xám khi chưa chọn
         for (int i = 0; i < optionsContainer.getChildCount(); i++) {
             View child = optionsContainer.getChildAt(i);
             if (child instanceof Button) {
@@ -199,8 +211,8 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
     }
 
     private void saveAnswerForQuestion(int questionId, String answer) {
+        // Lưu câu trả lời của người dùng cho câu hỏi vào DataMemory
         DataMemory.DATA_SAVE_QUESTION.getAnswers().removeIf(q -> q.getQuestion_id() == questionId);
         DataMemory.DATA_SAVE_QUESTION.getAnswers().add(new QuestionSave(questionId, answer));
     }
-
 }
