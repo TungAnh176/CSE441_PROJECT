@@ -124,7 +124,6 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
             Button button = new Button(DetailQuestionExamActivity.this);
             button.setText(optionText);
             button.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.gray));
-
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -134,6 +133,7 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
             button.setLayoutParams(layoutParams);
 
             button.setOnClickListener(v -> {
+            
                 DataMemory.DATA_SAVE_QUESTION.getAnswers().add(new QuestionSave(getIntent().getIntExtra("id", 1), optionLabel));
                 selectedAnswer = optionLabel;
                 String lowerCaseLabel = optionLabel.toLowerCase();
@@ -153,7 +153,6 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
 
         String jsonRequest = new Gson().toJson(request);
         Log.e("CheckAnswerRequest", jsonRequest);
-
         apiInterface.checkAnswer(request).enqueue(new Callback<AnswerQuestionHistory>() {
             @Override
             public void onResponse(Call<AnswerQuestionHistory> call, Response<AnswerQuestionHistory> response) {

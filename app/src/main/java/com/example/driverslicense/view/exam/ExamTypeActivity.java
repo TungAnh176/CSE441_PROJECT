@@ -270,6 +270,7 @@ public class ExamTypeActivity extends AppCompatActivity {
                         builder1.setPositiveButton("ok", (dialog, which) -> {
                             Toast.makeText(ExamTypeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(ExamTypeActivity.this, ExamActivity.class));
+
                             ExamTypeActivity.this.finish();
                             dialog.dismiss();
                             dialog.dismiss();
