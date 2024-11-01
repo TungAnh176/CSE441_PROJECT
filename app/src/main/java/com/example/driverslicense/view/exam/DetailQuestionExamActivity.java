@@ -24,6 +24,7 @@ import com.example.driverslicense.model.question.AnswerQuestionHistory;
 import com.example.driverslicense.model.question.Answers;
 import com.example.driverslicense.model.question.Option;
 import com.example.driverslicense.model.question.Question;
+import com.example.driverslicense.view.content.DetailQuesionActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -123,17 +124,22 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
             Button button = new Button(DetailQuestionExamActivity.this);
             button.setText(optionText);
             button.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.gray));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(0, 16, 0, 16); // Thiết lập khoảng cách: trên, dưới
+
+            button.setLayoutParams(layoutParams);
 
             button.setOnClickListener(v -> {
-                for (int i = 0; i < optionsContainer.getChildCount(); i++) {
-                    View nextChild = ((ViewGroup) optionsContainer).getChildAt(i);
-                    nextChild.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.gray));
-                }
+            
                 DataMemory.DATA_SAVE_QUESTION.getAnswers().add(new QuestionSave(getIntent().getIntExtra("id", 1), optionLabel));
                 selectedAnswer = optionLabel;
                 String lowerCaseLabel = optionLabel.toLowerCase();
                 sendAnswer(selectedAnswer, button);
             });
+
             optionsContainer.addView(button);
         }
     }
@@ -147,8 +153,6 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
 
         String jsonRequest = new Gson().toJson(request);
         Log.e("CheckAnswerRequest", jsonRequest);
-
-        // Gọi API
         apiInterface.checkAnswer(request).enqueue(new Callback<AnswerQuestionHistory>() {
             @Override
             public void onResponse(Call<AnswerQuestionHistory> call, Response<AnswerQuestionHistory> response) {
