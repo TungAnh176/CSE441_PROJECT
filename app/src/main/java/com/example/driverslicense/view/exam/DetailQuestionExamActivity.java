@@ -1,4 +1,4 @@
-package com.example.driverslicense.view.content;
+package com.example.driverslicense.view.exam;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,16 +17,16 @@ import com.bumptech.glide.Glide;
 import com.example.driverslicense.DataLocal.DataMemory;
 import com.example.driverslicense.R;
 import com.example.driverslicense.api.ApiServices;
+
+import com.example.driverslicense.controller.QuestionController;
+import com.example.driverslicense.model.exam.QuestionSave;
 import com.example.driverslicense.model.question.AnswerQuestionHistory;
 import com.example.driverslicense.model.question.Answers;
 import com.example.driverslicense.model.question.Option;
 import com.example.driverslicense.model.question.Question;
-import com.example.driverslicense.model.exam.QuestionSave;
-import com.example.driverslicense.controller.QuestionController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +39,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DetailQuesionActivity extends AppCompatActivity {
+public class DetailQuestionExamActivity extends AppCompatActivity {
 
-    TextView textView, txtDescription, txtCorrect;
+    TextView textView, txtDescription;
     ApiServices apiInterface;
     Question question;
     LinearLayout optionsContainer;
@@ -49,7 +49,6 @@ public class DetailQuesionActivity extends AppCompatActivity {
     private int questionId;
     ImageView imgBack;
     ImageView imgHinh;
-    private List<Button> optionButtons = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,6 @@ public class DetailQuesionActivity extends AppCompatActivity {
         txtDescription = findViewById(R.id.txtDescription);
         questionId = getIntent().getIntExtra("id", 1);
         imgBack = findViewById(R.id.imgBack);
-        txtCorrect = findViewById(R.id.txt_correct);
         imgBack.setOnClickListener(v -> {
             finish();
         });
@@ -78,7 +76,7 @@ public class DetailQuesionActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/api/") // Sử dụng địa chỉ localhost cho Android Emulator
+                .baseUrl("http://10.0.2.2:8000/api/")
                 .addConverterFactory(GsonConverterFactory.create(gson)).client(client)
                 .build();
 
@@ -122,40 +120,25 @@ public class DetailQuesionActivity extends AppCompatActivity {
     // Phương thức tạo nút cho từng option
     private void createOptionButton(String optionText, String optionLabel) {
         if (optionText != null) {
-            Button button = new Button(DetailQuesionActivity.this);
+            Button button = new Button(DetailQuestionExamActivity.this);
             button.setText(optionText);
-
-            button.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.gray));
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            layoutParams.setMargins(0, 16, 0, 16); // Thiết lập khoảng cách: trên, dưới
-
-            button.setLayoutParams(layoutParams);
+            button.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.gray));
 
             button.setOnClickListener(v -> {
+                for (int i = 0; i < optionsContainer.getChildCount(); i++) {
+                    View nextChild = ((ViewGroup) optionsContainer).getChildAt(i);
+                    nextChild.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.gray));
+                }
                 DataMemory.DATA_SAVE_QUESTION.getAnswers().add(new QuestionSave(getIntent().getIntExtra("id", 1), optionLabel));
                 selectedAnswer = optionLabel;
                 String lowerCaseLabel = optionLabel.toLowerCase();
                 sendAnswer(selectedAnswer, button);
             });
-
             optionsContainer.addView(button);
-            optionButtons.add(button);
-        }
-    }
-
-    private void resetAllButtonsColor() {
-        for (Button btn : optionButtons) {
-            btn.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.gray));
         }
     }
 
     private void sendAnswer(String answer, Button button) {
-        resetAllButtonsColor();
-
         Map<String, String> answerMap = new HashMap<>();
         answerMap.put(String.valueOf(questionId), answer);
 
@@ -165,6 +148,7 @@ public class DetailQuesionActivity extends AppCompatActivity {
         String jsonRequest = new Gson().toJson(request);
         Log.e("CheckAnswerRequest", jsonRequest);
 
+        // Gọi API
         apiInterface.checkAnswer(request).enqueue(new Callback<AnswerQuestionHistory>() {
             @Override
             public void onResponse(Call<AnswerQuestionHistory> call, Response<AnswerQuestionHistory> response) {
@@ -172,28 +156,11 @@ public class DetailQuesionActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         AnswerQuestionHistory checkAnswerResponse = response.body();
 
-                        // Kiểm tra giá trị của answers
                         Map<String, Boolean> answers = checkAnswerResponse.getAnswers();
                         if (answers != null && answers.containsKey(String.valueOf(questionId))) {
                             boolean isCorrect = answers.get(String.valueOf(questionId));
+                            button.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.green));
 
-                            // Hiển thị thông báo dựa trên giá trị isCorrect
-                            if (isCorrect) {
-                                txtDescription.setVisibility(View.GONE);
-
-                                button.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.green));
-                            } else {
-                                Log.d("TAG", "Bạn chọn sai.");
-                                String text = question.getOptions().get(0).getDescription();
-                                String correctAnswer = question.getCorrect_answer();
-                                txtDescription.setText(text);
-                                txtCorrect.setText("Đáp án đúng: " + correctAnswer.toUpperCase());
-                                txtCorrect.setVisibility(View.VISIBLE);
-                                txtDescription.setVisibility(View.VISIBLE);
-                                button.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.red));
-                                txtCorrect.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.green));
-
-                            }
                         } else {
                             Log.e("TAG", "Không tìm thấy câu trả lời cho câu hỏi.");
                         }
@@ -216,12 +183,5 @@ public class DetailQuesionActivity extends AppCompatActivity {
         });
 
     }
-
-    private void CreateTextView(String text) {
-        if (text != null) {
-            txtDescription.setText(text);
-        }
-    }
-
 
 }

@@ -27,6 +27,7 @@ import com.example.driverslicense.model.exam.QuestionExam;
 import com.example.driverslicense.model.exam.SaveAnwer;
 import com.example.driverslicense.model.exam.SaveAnwerResponse;
 import com.example.driverslicense.view.content.DetailQuesionActivity;
+import com.example.driverslicense.view.main.ActivityA1;
 import com.example.driverslicense.view.main.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -88,6 +89,7 @@ public class ExamTypeActivity extends AppCompatActivity {
         apiServices.getExamsTypeData(getIntent().getIntExtra("is_fixed", 1), getIntent().getIntExtra("id", 1), getIntent().getIntExtra("exam_id", 0)).enqueue(new Callback<List<Exam>>() {
             @Override
             public void onResponse(Call<List<Exam>> call, Response<List<Exam>> response) {
+                Log.d("ExamActivity", "Response received: " + getIntent().getIntExtra("id", 1));
                 Toast.makeText(ExamTypeActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     examList.clear();
@@ -95,12 +97,12 @@ public class ExamTypeActivity extends AppCompatActivity {
                     listView.setAdapter(examAdapter);
                     listView.setOnItemClickListener((parent, view, position, id) -> {
                         Log.d("ListView", "Item clicked at position: " + position);
-                        startActivity(new Intent(ExamTypeActivity.this, DetailQuesionActivity.class)
+                        startActivity(new Intent(ExamTypeActivity.this, DetailQuestionExamActivity.class)
                                 .putExtra("id", examList.get(position).getQuestion_id())
                                 .putExtra("chude", true));
                     });
                     DataMemory.DATA_SAVE_QUESTION.setUser_id(response.body().get(0).getUser_id() + "");
-                    DataMemory.DATA_SAVE_QUESTION.setExam_id(response.body().get(0).getExam_type() + "");
+                    DataMemory.DATA_SAVE_QUESTION.setExam_id(response.body().get(0).getId() + "");
                 } else {
 
 
@@ -126,6 +128,9 @@ public class ExamTypeActivity extends AppCompatActivity {
                     public void onResponse(Call<SaveAnwerResponse> call, Response<SaveAnwerResponse> response) {
                         DataMemory.DATA_SAVE_QUESTION = new SaveAnwer();
                         String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
+                        Log.d("API Response", "User ID: " + DataMemory.DATA_SAVE_QUESTION.getUser_id());
+                        Log.d("API Response", "Exam ID: " + DataMemory.DATA_SAVE_QUESTION.getExam_id());
+                        Log.d("ExamActivity", "Response received: " + response.body().getScore());
                         String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
 
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(ExamTypeActivity.this);
@@ -133,7 +138,7 @@ public class ExamTypeActivity extends AppCompatActivity {
                         builder1.setTitle("Thông báo số điểm!");
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
-                            Intent intent = new Intent(ExamTypeActivity.this, ExamActivity.class);
+                            Intent intent = new Intent(ExamTypeActivity.this, ActivityA1.class);
                             startActivity(intent);
                             ExamTypeActivity.this.finish();
                             dialog.dismiss();
@@ -211,8 +216,9 @@ public class ExamTypeActivity extends AppCompatActivity {
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
                             Toast.makeText(ExamTypeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(ExamTypeActivity.this, MainActivity.class));
+                            startActivity(new Intent(ExamTypeActivity.this, ActivityA1.class));
                             ExamTypeActivity.this.finish();
+                            dialog.dismiss();
                             dialog.dismiss();
                         });
 

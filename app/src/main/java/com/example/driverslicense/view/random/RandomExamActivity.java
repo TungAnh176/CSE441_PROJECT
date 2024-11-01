@@ -106,7 +106,7 @@ public class RandomExamActivity extends AppCompatActivity {
                         }
                     });
                     DataMemory.DATA_SAVE_QUESTION.setUser_id(response.body().getUser_id() + "");
-                    DataMemory.DATA_SAVE_QUESTION.setExam_id(response.body().getExam_type() + "");
+                    DataMemory.DATA_SAVE_QUESTION.setExam_id(response.body().getId() + "");
                 } else {
 
                 }

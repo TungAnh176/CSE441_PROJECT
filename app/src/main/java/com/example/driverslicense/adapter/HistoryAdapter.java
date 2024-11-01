@@ -2,6 +2,7 @@ package com.example.driverslicense.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +47,13 @@ public class HistoryAdapter extends ArrayAdapter<History> {
             txtID.setTextColor(Color.RED);
             txtScore.setTextColor(Color.RED);
         }
-
         // Đặt giá trị cho các TextView
-        txtID.setText("Bộ đề số " + String.valueOf(history.getId()));
+        int examId = history.getExam_id();
+
+        // Chuyển đổi exam_id từ 9-18 thành 1-10
+        int displayId = (examId >= 9 && examId <= 18) ? examId - 8 : examId;
+
+        txtID.setText("Bài số: " + String.valueOf(displayId));
         txtScore.setText("Điểm số: " + String.valueOf(history.getScore()));
 
         return convertView;
