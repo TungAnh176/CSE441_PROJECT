@@ -1,5 +1,7 @@
 package com.example.driverslicense.model.history;
 
+import com.example.driverslicense.model.exam.Exam;
+
 import java.util.List;
 
 public class History {
@@ -72,7 +74,6 @@ public class History {
     public Boolean getPass() {
         return pass;
     }
-
 
 
 }
