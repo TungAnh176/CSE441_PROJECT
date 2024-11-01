@@ -247,7 +247,56 @@ public class ExamTypeActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+<<<<<<< HEAD
                 handleTimerFinish();
+=======
+
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Exam.class, new ExamController())
+                        .create();
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:8000/api/")
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+
+                apiServices = retrofit.create(ApiServices.class);
+                apiServices.saveAnwer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnwerResponse>() {
+                    @Override
+                    public void onResponse(Call<SaveAnwerResponse> call, Response<SaveAnwerResponse> response) {
+                        DataMemory.DATA_SAVE_QUESTION = new SaveAnwer();
+                        String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
+                        String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ExamTypeActivity.this);
+                        builder1.setMessage("" + diem);
+                        builder1.setTitle("Thông báo số điểm!");
+                        builder1.setCancelable(false);
+                        builder1.setPositiveButton("ok", (dialog, which) -> {
+                            Toast.makeText(ExamTypeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ExamTypeActivity.this, ExamActivity.class));
+
+                            ExamTypeActivity.this.finish();
+                            dialog.dismiss();
+                            dialog.dismiss();
+                        });
+
+                        AlertDialog alertDialog = builder1.create();
+                        alertDialog.show();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<SaveAnwerResponse> call, Throwable throwable) {
+
+                    }
+                });
+                txtTime.setText("Done!");
+>>>>>>> 2e80f9fd87e5071a3cf4ef4942ca37abea18df84
             }
         }.start();
     }

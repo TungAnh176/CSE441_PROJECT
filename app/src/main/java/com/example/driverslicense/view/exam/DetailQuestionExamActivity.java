@@ -103,6 +103,7 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
         });
     }
 
+<<<<<<< HEAD
     private Gson buildGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(Question.class, new QuestionController())
@@ -113,6 +114,19 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+=======
+    // Phương thức tạo nút cho từng option
+    private void createOptionButton(String optionText, String optionLabel) {
+        if (optionText != null) {
+            Button button = new Button(DetailQuestionExamActivity.this);
+            button.setText(optionText);
+            button.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.gray));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(0, 16, 0, 16); // Thiết lập khoảng cách: trên, dưới
+>>>>>>> 2e80f9fd87e5071a3cf4ef4942ca37abea18df84
 
         return new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8000/api/")
@@ -121,10 +135,20 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
                 .build();
     }
 
+<<<<<<< HEAD
     private void displayQuestionContent() {
         textView.setText(question.getContent());
         selectedAnswer = getSavedAnswerForQuestion(questionId);
     }
+=======
+            button.setOnClickListener(v -> {
+            
+                DataMemory.DATA_SAVE_QUESTION.getAnswers().add(new QuestionSave(getIntent().getIntExtra("id", 1), optionLabel));
+                selectedAnswer = optionLabel;
+                String lowerCaseLabel = optionLabel.toLowerCase();
+                sendAnswer(selectedAnswer, button);
+            });
+>>>>>>> 2e80f9fd87e5071a3cf4ef4942ca37abea18df84
 
     private void displayOptions() {
         optionsContainer.removeAllViews();
@@ -141,11 +165,56 @@ public class DetailQuestionExamActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
     private void loadOptionImage(String imageUrl) {
         imgHinh.setVisibility(View.VISIBLE);
         Glide.with(getApplicationContext())
                 .load(imageUrl)
                 .into(imgHinh);
+=======
+    private void sendAnswer(String answer, Button button) {
+        Map<String, String> answerMap = new HashMap<>();
+        answerMap.put(String.valueOf(questionId), answer);
+
+        Answers request = new Answers();
+        request.setAnswers(answerMap);
+
+        String jsonRequest = new Gson().toJson(request);
+        Log.e("CheckAnswerRequest", jsonRequest);
+        apiInterface.checkAnswer(request).enqueue(new Callback<AnswerQuestionHistory>() {
+            @Override
+            public void onResponse(Call<AnswerQuestionHistory> call, Response<AnswerQuestionHistory> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        AnswerQuestionHistory checkAnswerResponse = response.body();
+
+                        Map<String, Boolean> answers = checkAnswerResponse.getAnswers();
+                        if (answers != null && answers.containsKey(String.valueOf(questionId))) {
+                            boolean isCorrect = answers.get(String.valueOf(questionId));
+                            button.setBackgroundColor(ContextCompat.getColor(DetailQuestionExamActivity.this, R.color.green));
+
+                        } else {
+                            Log.e("TAG", "Không tìm thấy câu trả lời cho câu hỏi.");
+                        }
+
+                        String jsonResponse = new Gson().toJson(checkAnswerResponse);
+                        Log.e("CheckAnswerResponse Body", jsonResponse);
+                    } else {
+                        Log.e("TAG", "Response body is null");
+                    }
+                } else {
+                    Log.e("DetailQuesionActivity", "Response unsuccessful: " + response.message());
+                    Log.e("DetailQuesionActivity", "Error Body: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AnswerQuestionHistory> call, Throwable throwable) {
+                Log.e("DetailQuesionActivity", "Failure: " + throwable.getMessage());
+            }
+        });
+
+>>>>>>> 2e80f9fd87e5071a3cf4ef4942ca37abea18df84
     }
 
     private void createOptionButtons(Option option) {
