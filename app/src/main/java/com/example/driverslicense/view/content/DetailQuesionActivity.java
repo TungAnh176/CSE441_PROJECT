@@ -171,16 +171,12 @@ public class DetailQuesionActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         AnswerQuestionHistory checkAnswerResponse = response.body();
-
-                        // Kiểm tra giá trị của answers
                         Map<String, Boolean> answers = checkAnswerResponse.getAnswers();
                         if (answers != null && answers.containsKey(String.valueOf(questionId))) {
                             boolean isCorrect = answers.get(String.valueOf(questionId));
 
-                            // Hiển thị thông báo dựa trên giá trị isCorrect
                             if (isCorrect) {
                                 txtDescription.setVisibility(View.GONE);
-
                                 button.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.green));
                             } else {
                                 Log.d("TAG", "Bạn chọn sai.");
@@ -216,12 +212,5 @@ public class DetailQuesionActivity extends AppCompatActivity {
         });
 
     }
-
-    private void CreateTextView(String text) {
-        if (text != null) {
-            txtDescription.setText(text);
-        }
-    }
-
 
 }

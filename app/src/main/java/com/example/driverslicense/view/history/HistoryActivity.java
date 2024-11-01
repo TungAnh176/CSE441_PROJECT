@@ -51,10 +51,10 @@ public class HistoryActivity extends AppCompatActivity {
         btnBackHistory = findViewById(R.id.btn_back_history);
         int typeID = getIntent().getIntExtra("id", 0);
         setupBackButton();
-        fetchHisory(typeID);
+        fetchHistory(typeID);
     }
 
-    private void fetchHisory(int typeID) {
+    private void fetchHistory(int typeID) {
 
         listView = findViewById(R.id.item_history);
         historyList = new ArrayList<>();
@@ -94,11 +94,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private void setupBackButton() {
         btnBackHistory.setOnClickListener(view -> {
-            Intent intent = new Intent(HistoryActivity.this,
-                    getIntent().getIntExtra("id", 0) == 1 ? ActivityA1.class : ActivityA2.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            startActivity(intent);
             finish(); // Có thể bỏ dòng này nếu không cần
         });
     }
