@@ -40,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailQuesionActivity extends AppCompatActivity {
 
     TextView textView, txtDescription, txtCorrect;
-    ApiServices apiInterface;
+    ApiServices apiServices;
     Question question;
     LinearLayout optionsContainer;
     private String selectedAnswer;
@@ -80,8 +80,8 @@ public class DetailQuesionActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson)).client(client)
                 .build();
 
-        apiInterface = retrofit.create(ApiServices.class);
-        apiInterface.getDetailQuestion(questionId).enqueue(new Callback<Question>() {
+        apiServices = retrofit.create(ApiServices.class);
+        apiServices.getDetailQuestion(questionId).enqueue(new Callback<Question>() {
             @Override
             public void onResponse(Call<Question> call, Response<Question> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -163,7 +163,7 @@ public class DetailQuesionActivity extends AppCompatActivity {
         String jsonRequest = new Gson().toJson(request);
         Log.e("CheckAnswerRequest", jsonRequest);
 
-        apiInterface.checkAnswer(request).enqueue(new Callback<AnswerQuestionHistory>() {
+        apiServices.checkAnswer(request).enqueue(new Callback<AnswerQuestionHistory>() {
             @Override
             public void onResponse(Call<AnswerQuestionHistory> call, Response<AnswerQuestionHistory> response) {
                 if (response.isSuccessful()) {
@@ -176,6 +176,7 @@ public class DetailQuesionActivity extends AppCompatActivity {
                             if (isCorrect) {
                                 txtDescription.setVisibility(View.GONE);
                                 button.setBackgroundColor(ContextCompat.getColor(DetailQuesionActivity.this, R.color.green));
+                                txtCorrect.setVisibility(View.GONE);
                             } else {
                                 Log.d("TAG", "Bạn chọn sai.");
                                 String text = question.getOptions().get(0).getDescription();

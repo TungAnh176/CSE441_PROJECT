@@ -73,7 +73,6 @@ public class HistoryActivity extends AppCompatActivity {
         apiServices.getUserExamHistory(typeID).enqueue(new Callback<List<History>>() {
             @Override
             public void onResponse(Call<List<History>> call, Response<List<History>> response) {
-                Toast.makeText(HistoryActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     historyList.clear();
                     historyList.addAll(response.body());
@@ -86,7 +85,6 @@ public class HistoryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<History>> call, Throwable t) {
-                Toast.makeText(HistoryActivity.this, "Error"+ t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("HistoryActivity", "onFailure: " + t.getMessage());
             }
         });
@@ -94,8 +92,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private void setupBackButton() {
         btnBackHistory.setOnClickListener(view -> {
-
-            finish(); // Có thể bỏ dòng này nếu không cần
+            finish();
         });
     }
 

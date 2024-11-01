@@ -85,7 +85,6 @@ public class QuestionActivity extends AppCompatActivity {
         listQuestionService.getListQuestion(type).enqueue(new Callback<List<Question>>() {
             @Override
             public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
-                Toast.makeText(QuestionActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     questions.clear();
                     questions.addAll(response.body());
@@ -102,7 +101,6 @@ public class QuestionActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Question>> call, Throwable throwable) {
-                Toast.makeText(QuestionActivity.this, "Error"+ throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("QuestionActivity", "Error fetching exams: ", throwable);
             }
         });

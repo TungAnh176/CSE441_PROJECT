@@ -64,10 +64,7 @@ public class ContentActivity extends AppCompatActivity {
     }
     private void setupBackButton(){
         btnBackContent.setOnClickListener(view -> {
-            Intent intent = (getIntent().getIntExtra("category_id", 0)==1)
-                    ? new Intent(ContentActivity.this, ActivityA1.class)
-                    : new Intent(ContentActivity.this, ActivityA2.class);
-            startActivity(intent);
+
             finish();
         });
     }
@@ -77,7 +74,7 @@ public class ContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ContentActivity.this, ListContentActivity.class);
-                intent.putExtra("name", "Khái niệm và quy tắc giao thông");
+                intent.putExtra("name", "Khái niệm và quy tắc");
                 intent.putExtra("type_id", type); // Đảm bảo 'type' không bị null
                 intent.putExtra("category_id", 1); // Đảm bảo giá trị truyền là hợp lệ
                 startActivity(intent);

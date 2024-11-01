@@ -27,7 +27,7 @@ import com.example.driverslicense.model.exam.Exam;
 import com.example.driverslicense.model.exam.QuestionExam;
 import com.example.driverslicense.model.exam.SaveAnswer;
 import com.example.driverslicense.model.exam.SaveAnswerResponse;
-import com.example.driverslicense.view.content.DetailQuesionActivity;
+import com.example.driverslicense.view.exam.DetailQuestionExamActivity;
 import com.example.driverslicense.controller.ExamController;
 import com.example.driverslicense.view.main.MainActivity;
 import com.google.gson.Gson;
@@ -93,7 +93,6 @@ public class RandomExamActivity extends AppCompatActivity {
         contentService.getExamByID(getIntent().getIntExtra("exam_id", 1)).enqueue(new Callback<Exam>() {
             @Override
             public void onResponse(@NonNull Call<Exam> call, @NonNull Response<Exam> response) {
-                Toast.makeText(RandomExamActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
                     examList.clear();
                     examList.addAll(response.body().getQuestions());
@@ -101,7 +100,7 @@ public class RandomExamActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startActivity(new Intent(RandomExamActivity.this, DetailQuesionActivity.class)
+                            startActivity(new Intent(RandomExamActivity.this, DetailQuestionExamActivity.class)
                                     .putExtra("id", examList.get(position).getQuestion_id()));
                         }
                     });
@@ -153,6 +152,7 @@ public class RandomExamActivity extends AppCompatActivity {
                         builder1.setPositiveButton("ok", (dialog, which) -> {
 
                             dialog.dismiss();
+                            RandomExamActivity.this.finish();
                         });
 
                         // Create the Alert dialog
@@ -229,10 +229,9 @@ public class RandomExamActivity extends AppCompatActivity {
                         builder1.setTitle("Thông báo số điểm!");
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
-                            Toast.makeText(RandomExamActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RandomExamActivity.this, MainActivity.class));
-                            RandomExamActivity.this.finish();
                             dialog.dismiss();
+                            RandomExamActivity.this.finish();
+
                         });
 
                         // Create the Alert dialog

@@ -59,7 +59,7 @@
             android:background="@drawable/button"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Khái niệm và quy tắc giao thông" />
+            android:text="Khái niệm và quy tắc" />
 
         <Button
             android:id="@+id/btn_culture"
