@@ -47,11 +47,11 @@ public class ExamTypeActivity extends AppCompatActivity {
     ListView listView;
     List<QuestionExam> examList;
     ExamTypeAdapter examAdapter;
-    Button btnSave;
+    Button btnSave, btnBack;
     private CountDownTimer countDownTimer;
     private long timeLeftInMillis = 1200000;
     TextView txtTime;
-
+    ApiServices apiServices;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +65,15 @@ public class ExamTypeActivity extends AppCompatActivity {
 
         txtTime = findViewById(R.id.txt_time);
         btnSave = findViewById(R.id.btnSave);
+        btnBack = findViewById(R.id.btn_back_exam1);
+        int isFixed = getIntent().getIntExtra("is_fixed", 1);
+        int id = getIntent().getIntExtra("id", 1);
+        int examId = getIntent().getIntExtra("exam_id", 0);
         startTimer();
+        getExam(isFixed, id, examId);
 
+    }
+    private void getExam(int isFixed, int id, int examId) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Exam.class, new ExamController())
                 .create();
@@ -80,13 +87,13 @@ public class ExamTypeActivity extends AppCompatActivity {
                 .client(client)
                 .build();
 
-        ApiServices apiServices = retrofit.create(ApiServices.class);
+        apiServices = retrofit.create(ApiServices.class);
 
         listView = findViewById(R.id.item_exam_type);
         examList = new ArrayList<>();
         examAdapter = new ExamTypeAdapter(this, examList);
 
-        apiServices.getExamsTypeData(getIntent().getIntExtra("is_fixed", 1), getIntent().getIntExtra("id", 1), getIntent().getIntExtra("exam_id", 0)).enqueue(new Callback<List<Exam>>() {
+        apiServices.getExamsTypeData(isFixed, id, examId).enqueue(new Callback<List<Exam>>() {
             @Override
             public void onResponse(Call<List<Exam>> call, Response<List<Exam>> response) {
                 Log.d("ExamActivity", "Response received: " + getIntent().getIntExtra("id", 1));
@@ -138,15 +145,11 @@ public class ExamTypeActivity extends AppCompatActivity {
                         builder1.setTitle("Thông báo số điểm!");
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
-                            Intent intent = new Intent(ExamTypeActivity.this, ActivityA1.class);
-                            startActivity(intent);
-                            ExamTypeActivity.this.finish();
                             dialog.dismiss();
+                            ExamTypeActivity.this.finish();
                         });
 
-                        // Create the Alert dialog
                         AlertDialog alertDialog = builder1.create();
-                        // Show the Alert Dialog box
                         alertDialog.show();
 
                     }
@@ -166,7 +169,57 @@ public class ExamTypeActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         });
+    }
 
+    private void back() {
+        btnBack.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ExamTypeActivity.this);
+            builder.setMessage("Bạn có chắc chắn muốn thoát không?");
+            builder.setTitle("Xác nhận thoát");
+            builder.setCancelable(false);
+
+            builder.setPositiveButton("Có", (dialog, which) -> {
+                apiServices.saveAnwer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnwerResponse>() {
+                    @Override
+                    public void onResponse(Call<SaveAnwerResponse> call, Response<SaveAnwerResponse> response) {
+                        DataMemory.DATA_SAVE_QUESTION = new SaveAnwer();
+                        String checkPass = response.body().getPass() ? "Đã đạt bài thi" : "Bạn cần ôn tập thi lại";
+                        Log.d("API Response", "User ID: " + DataMemory.DATA_SAVE_QUESTION.getUser_id());
+                        Log.d("API Response", "Exam ID: " + DataMemory.DATA_SAVE_QUESTION.getExam_id());
+                        Log.d("ExamActivity", "Response received: " + response.body().getScore());
+                        String diem = checkPass + "\n" + response.body().getScore() + "/" + examList.size();
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(ExamTypeActivity.this);
+                        builder1.setMessage("" + diem);
+                        builder1.setTitle("Thông báo số điểm!");
+                        builder1.setCancelable(false);
+                        builder1.setPositiveButton("ok", (dialog, which) -> {
+                            dialog.dismiss();
+                            ExamTypeActivity.this.finish();
+                        });
+
+                        AlertDialog alertDialog = builder1.create();
+                        alertDialog.show();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<SaveAnwerResponse> call, Throwable throwable) {
+
+                    }
+                });
+                dialog.dismiss();
+                finish();
+            });
+
+            builder.setNegativeButton("Không", (dialog, which) -> {
+
+                dialog.cancel();
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
     }
 
     private void updateTimer() {
@@ -202,7 +255,7 @@ public class ExamTypeActivity extends AppCompatActivity {
                         .client(client)
                         .build();
 
-                ApiServices apiServices = retrofit.create(ApiServices.class);
+                apiServices = retrofit.create(ApiServices.class);
                 apiServices.saveAnwer(DataMemory.DATA_SAVE_QUESTION).enqueue(new Callback<SaveAnwerResponse>() {
                     @Override
                     public void onResponse(Call<SaveAnwerResponse> call, Response<SaveAnwerResponse> response) {
@@ -216,15 +269,13 @@ public class ExamTypeActivity extends AppCompatActivity {
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("ok", (dialog, which) -> {
                             Toast.makeText(ExamTypeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(ExamTypeActivity.this, ActivityA1.class));
+                            startActivity(new Intent(ExamTypeActivity.this, ExamActivity.class));
                             ExamTypeActivity.this.finish();
                             dialog.dismiss();
                             dialog.dismiss();
                         });
 
-                        // Create the Alert dialog
                         AlertDialog alertDialog = builder1.create();
-                        // Show the Alert Dialog box
                         alertDialog.show();
 
                     }
